@@ -8,6 +8,10 @@ class BitCycleAlgorithm(BaseAlgorithm):
     The class provides the option to cycle the bits forming the text string an
     arbitrary amount of positions. The decoding process uses right-cycling as
     the inverse operation of left-cycling.
+
+    This class requires the following parameters:
+        Algorithm list, provided by the user
+        Algorithm index, calculated automatically
     """
 
     def __get_cycle_positions(self, **kwargs) -> int:
@@ -31,7 +35,7 @@ class BitCycleAlgorithm(BaseAlgorithm):
         return positions
 
     def encode(self, text: bytes, **kwargs) -> bytes:
-        """Encode the text using the left-cycle algorithm at bit level.
+        """Encode the text using the bit-wise left-cycle algorithm.
 
         :param text: The text to encode.
         :param kwargs: See BitCycleAlgorithm.
@@ -41,7 +45,6 @@ class BitCycleAlgorithm(BaseAlgorithm):
         bit_list = bytes_conversions.bytes_to_bit_rep(text)
 
         positions = self.__get_cycle_positions(**kwargs)
-
         # Cycle first N bits
         bit_list = bit_list[positions:] + bit_list[:positions]
 
@@ -49,7 +52,7 @@ class BitCycleAlgorithm(BaseAlgorithm):
         return bytes_conversions.bit_rep_to_bytes(bit_list)
 
     def decode(self, text: bytes, **kwargs) -> bytes:
-        """Decode the text using the right-cycle algorithm at bit level.
+        """Decode the text using the bit-wise right-cycle algorithm.
 
         :param text: The text to decode.
         :param kwargs: See BitCycleAlgorithm.
