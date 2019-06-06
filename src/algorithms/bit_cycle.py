@@ -18,8 +18,9 @@ class BitCycleAlgorithm(BaseAlgorithm):
         """Determine the positions to shift based on the algorithm list.
 
         Looks for the current position in the algorithm list and tries to find
-        a single-digit value on the next position. The digit represents the
-        amount of bits to cycle. If no digit is found, defaults to 4 bits.
+        a single-digit value (1-9) on the next position. The digit represents
+        the amount of bits to cycle. If no digit is found, defaults to 4 bits.
+        If digit found is 0, defaults to 1.
 
         :param kwargs: See BitCycleAlgorithm.
         :return: The amount of positions to cycle.
@@ -31,18 +32,23 @@ class BitCycleAlgorithm(BaseAlgorithm):
         1
         >>> bca = BitCycleAlgorithm()
         >>> bca._BitCycleAlgorithm__get_cycle_positions(
-        ...     algorithms=bytes("b", "ascii"),
+        ...     algorithms=bytes("b0", "ascii"),
         ...     index=0)
-        4
+        1
         >>> bca = BitCycleAlgorithm()
         >>> bca._BitCycleAlgorithm__get_cycle_positions(
-        ...     algorithms=bytes("acdb5", "ascii"),
+        ...     algorithms=bytes("acdb0", "ascii"),
         ...     index=3)
         5
         >>> bca = BitCycleAlgorithm()
         >>> bca._BitCycleAlgorithm__get_cycle_positions(
         ...     algorithms=bytes("a", "ascii"),
         ...     index=10)
+        4
+        >>> bca = BitCycleAlgorithm()
+        >>> bca._BitCycleAlgorithm__get_cycle_positions(
+        ...     algorithms=bytes("abc", "ascii"),
+        ...     index=1)
         4
         """
         try:
@@ -53,7 +59,7 @@ class BitCycleAlgorithm(BaseAlgorithm):
         except (ValueError, IndexError):
             # Fall back to default value
             positions = 4
-        return positions
+        return max(positions, 1)
 
     def encode(self, text: bytes, **kwargs) -> bytes:
         """Encode the text using the bit-wise left-cycle algorithm.
