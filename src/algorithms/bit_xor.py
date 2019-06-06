@@ -26,8 +26,18 @@ class BitXorAlgorithm(BaseAlgorithm):
         :param text: The bytes object to encode.
         :param kwargs: See BitXorAlgorithm.
         :return: The encoded text, as a bytes object.
+
+        >>> bxa = BitXorAlgorithm()
+        >>> bxa.encode(
+        ...     bytes("a", "ascii"),
+        ...     algorithms=bytes(chr(0), "ascii"))
+        b'a'
+        >>> bxa.encode(
+        ...     bytes("a", "ascii"),
+        ...     algorithms=bytes("a", "ascii"))
+        b'\\x00'
         """
-        key = kwargs.get("algorithm_list")
+        key = kwargs.get("algorithms")
         # Copy to at least text size
         if len(key) < len(text):
             key = key * (len(text) // len(key) + 1)
@@ -44,5 +54,20 @@ class BitXorAlgorithm(BaseAlgorithm):
         :param text: The bytes object to decode.
         :param kwargs: See BitXorAlgorithm.
         :return: The decoded text, as a bytes object.
+
+        >>> bxa = BitXorAlgorithm()
+        >>> bxa.decode(
+        ...     bytes("a", "ascii"),
+        ...     algorithms=bytes(chr(0), "ascii"))
+        b'a'
+        >>> bxa.decode(
+        ...     bytes("a", "ascii"),
+        ...     algorithms=bytes("a", "ascii"))
+        b'\\x00'
         """
         return self.encode(text, **kwargs)
+
+
+if __name__ == "__main__":
+    import doctest
+    doctest.testmod()

@@ -9,12 +9,12 @@ def bytes_to_bit_rep(string: bytes) -> str:
     :return: A single string that is the concatenation of the bits from the
     bytes in the input object.
 
-    >>> bytes_to_bit_rep(bytes("a", "UTF-8"))
-    '01100001'
-    >>> bytes_to_bit_rep(bytes("foo", "UTF-8"))
-    '011001100110111101101111'
+    >>> bytes_to_bit_rep(bytes("a", "ascii"))
+    '1100001'
+    >>> bytes_to_bit_rep(bytes("foo", "ascii"))
+    '110011011011111101111'
     """
-    return ''.join([f"{ch:08b}" for ch in string])
+    return ''.join([f"{ch:07b}" for ch in string])
 
 
 def bit_rep_to_bytes(bit_rep: str) -> bytes:
@@ -29,17 +29,17 @@ def bit_rep_to_bytes(bit_rep: str) -> bytes:
     :return: The bytes object that results from dividing the binary
     representation string into chunks of 8 bits.
 
-    >>> bit_rep_to_bytes('01100001')
+    >>> bit_rep_to_bytes('1100001')
     b'a'
-    >>> bit_rep_to_bytes('011001100110111101101111')
+    >>> bit_rep_to_bytes('110011011011111101111')
     b'foo'
     """
-    string = bytes("", "UTF-8")
-    # Split input string into 8-bit chunks
-    byte_array = [bit_rep[i:i+8] for i in range(0, len(bit_rep), 8)]
+    string = bytes("", "ascii")
+    # Split input string into 7-bit chunks
+    byte_array = [bit_rep[i:i+7] for i in range(0, len(bit_rep), 7)]
     for byte in byte_array:
         # Convert to characters and add to existing bytes object
-        string += bytes(f"{chr(int(byte, 2))}", "UTF-8")
+        string += bytes(f"{chr(int(byte, 2))}", "ascii")
     return string
 
 

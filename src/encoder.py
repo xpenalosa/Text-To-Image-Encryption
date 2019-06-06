@@ -2,7 +2,7 @@ from src import algorithms as algo
 
 
 def encode_text(text: bytes, algorithm_index: int,
-                algorithm_list: bytes = b'0') -> bytes:
+                algorithm_list: bytes) -> bytes:
     """Encode a string with the algorithm specified.
 
     :param text: The text to encode.
@@ -10,11 +10,12 @@ def encode_text(text: bytes, algorithm_index: int,
     :param algorithm_list: The list of algorithm identifiers.
     :return: The encoded text.
     """
-    return algo.algo_dict.get(algorithm_list[algorithm_index]).encode(
+    algorithm_id = chr(algorithm_list[algorithm_index])
+    return algo.algorithm_dict.get(algorithm_id).encode(
         text, algorithms=algorithm_list, index=algorithm_index)
 
 
-def encode_file(text_file: str, algorithm_list: str = '0') -> str:
+def encode_file(text_file: str, algorithm_list: bytes) -> bytes:
     """Read the contents of a text file and encode the contents through a
     series of string-modifying algorithms.
 
@@ -25,11 +26,11 @@ def encode_file(text_file: str, algorithm_list: str = '0') -> str:
     with open(text_file, "rb") as f:
         raw_text = f.read()
 
-    encoded_text = encode_text(raw_text, algorithm_list[0])
-    for algorithm in algorithm_list[1:]:
-        encoded_text = encode_text(encoded_text, algorithm)
+    encoded_text = encode_text(raw_text, 0, algorithm_list)
+    for i in range(1, len(algorithm_list)):
+        encoded_text = encode_text(encoded_text, i, algorithm_list)
 
-    return f"{algorithm_list}_{encoded_text}"
+    return algorithm_list + bytes("_", "ascii") + encoded_text
 
 
 def print_help():
@@ -39,8 +40,8 @@ def print_help():
 
 if __name__ == "__main__":
     import sys
-    if len(sys.argv) < 2:
+    if len(sys.argv) < 3:
         print_help()
     else:
-        encoded_data = encode_file(sys.argv[1], sys.argv[2])
+        encoded_data = encode_file(sys.argv[1], bytes(sys.argv[2], "ascii"))
         print(encoded_data)
