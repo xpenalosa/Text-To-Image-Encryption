@@ -37,7 +37,7 @@ class BitCycleAlgorithm(BaseAlgorithm):
         1
         >>> bca = BitCycleAlgorithm()
         >>> bca._BitCycleAlgorithm__get_cycle_positions(
-        ...     algorithms=bytes("acdb0", "ascii"),
+        ...     algorithms=bytes("acdb5ef", "ascii"),
         ...     index=3)
         5
         >>> bca = BitCycleAlgorithm()
