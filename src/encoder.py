@@ -1,4 +1,5 @@
 from src import algorithms as algo
+from src.utilities import image_conversions
 
 
 def encode_text(text: bytes, algorithm_index: int,
@@ -30,7 +31,7 @@ def encode_file(text_file: str, algorithm_list: bytes) -> bytes:
     for i in range(1, len(algorithm_list)):
         encoded_text = encode_text(encoded_text, i, algorithm_list)
 
-    return algorithm_list + bytes("_", "ascii") + encoded_text
+    return encoded_text
 
 
 def print_help():
@@ -44,4 +45,5 @@ if __name__ == "__main__":
         print_help()
     else:
         encoded_data = encode_file(sys.argv[1], bytes(sys.argv[2], "ascii"))
-        print(encoded_data)
+        image = image_conversions.bytes_to_image(encoded_data)
+
