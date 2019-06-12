@@ -1,6 +1,5 @@
 from src import algorithms as algo
 from src.utilities import image_conversions
-import os
 
 
 def encode_text(text: bytes, algorithm_index: int,
