@@ -1,5 +1,6 @@
 from src import algorithms as algo
 from src.utilities import image_conversions
+import os
 
 
 def encode_text(text: bytes, algorithm_index: int,
@@ -44,6 +45,13 @@ if __name__ == "__main__":
     if len(sys.argv) < 3:
         print_help()
     else:
-        encoded_data = encode_file(sys.argv[1], bytes(sys.argv[2], "ascii"))
+        file_name = sys.argv[1]
+        # Encode file contents
+        encoded_data = encode_file(file_name, bytes(sys.argv[2], "ascii"))
+        # Manipulate encoded data into an RGB image
         image = image_conversions.bytes_to_image(encoded_data)
 
+        # Get input file path and name without the file extension
+        file_id = ''.join(file_name.split(".")[:-1])
+        # Store output image as PNG
+        image.save(f"{file_id}.png", "PNG")
