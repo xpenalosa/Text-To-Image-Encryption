@@ -6,7 +6,7 @@ from PIL import Image
 padding_info_bytes = 2
 
 
-def get_min_image_size(data: bytes) -> Tuple[int, int]:
+def get_min_image_size(data: bytearray) -> Tuple[int, int]:
     """ Find the minimum pixels required to create a square from an array.
 
     Calculates the minimum dimensions used to create a squared RGB image while
@@ -26,7 +26,7 @@ def get_min_image_size(data: bytes) -> Tuple[int, int]:
     return short_side, long_side
 
 
-def bytes_to_image(data_bytes: bytes) -> Image:
+def bytes_to_image(data: bytearray) -> Image:
     """Convert a bytes object into a PIL Image with RGB format
 
     This function takes a bytes object and builds an RGB image by assigning a
@@ -44,58 +44,62 @@ def bytes_to_image(data_bytes: bytes) -> Image:
     The amount of bytes that contain the number of padded bytes is defined at
     the top of this file.
 
-    :param data_bytes: The bytes object to convert.
+    :param data: The byte array object to convert.
     :return: A PIL.Image with RGB format.
     """
     # Obtain squared dimensions
-    short_side, long_side = get_min_image_size(data_bytes)
+    short_side, long_side = get_min_image_size(data)
     # Calculate necessary padding bytes
-    padding_bytes = short_side * long_side * 3 - len(data_bytes) - padding_info_bytes
+    pad_count = short_side * long_side * 3 - len(data) - padding_info_bytes
 
     # N bytes of padding at most
-    if padding_bytes > 2**(7*padding_info_bytes) - 1:
+    if pad_count > 2**(8*padding_info_bytes) - 1:
         raise ValueError("Text is too long to be encoded in an image")
 
-    # Add padding behind text data
-    pad_bytes = random_choices(data_bytes, k=padding_bytes)
-    for pad_byte in pad_bytes:
-        data_bytes += bytes(chr(pad_byte), "ascii")
+    # Create padding bytes from sample
+    padding = bytearray()
+    for byte in random_choices(data, k=pad_count):
+        padding.append(byte)
 
     # Add padding info in front of padded data
-    padding_info = []
+    padding_info = bytearray()
     # Split padding into N bytes
     for i in range(padding_info_bytes):
-        padding_info.append(bytes(chr(padding_bytes & (2**7-1)), "ascii"))
-        padding_bytes = padding_bytes >> 7
-    # Add LSB to the front iteratively
-    for pad_info in padding_info:
-        data_bytes = pad_info + data_bytes
+        padding_info.append(pad_count & 255)
+        pad_count = pad_count >> 8
+    # Decreasing signifiance
+    padding_info.reverse()
 
-    image = Image.frombytes("RGB", (short_side, long_side), data_bytes)
+    # Merge byte arrays
+    data = padding_info + data + padding
+
+    image = Image.frombytes("RGB", (short_side, long_side), bytes(data))
     return image
 
 
-def image_to_bytes(image: Image) -> bytes:
+def image_to_bytes(data: Image) -> bytearray:
     """Recover the bytes object used to create a PIL Image with RGB format.
 
     Follows the procedure defined in bytes_to_image, but in inverse order:
     The padding is removed from the Image object and the bytes are recovered
     through PIL's Image.tobytes() method.
 
-    :param image: The PIL Image.
-    :return: The bytes object used to create the input Image.
+    :param data: The PIL Image.
+    :return: The byte array object used to create the input Image.
     """
-    data_bytes = image.tobytes()
+    data_byte_arr = bytearray(data.tobytes())
 
     # Rebuild padding value from first bytes
     padding = 0
     for i in range(padding_info_bytes):
-        padding += data_bytes[i] << (padding_info_bytes - i - 1) * 7
+        print(data_byte_arr[i])
+        padding += data_byte_arr[i] << (padding_info_bytes - i - 1) * 8
 
+    print(padding)
     if padding:
         # Avoid negative zero padding value
-        data_bytes = data_bytes[padding_info_bytes:-padding]
+        data_bytes = data_byte_arr[padding_info_bytes:-padding]
     else:
-        data_bytes = data_bytes[padding_info_bytes:]
+        data_bytes = data_byte_arr[padding_info_bytes:]
 
     return data_bytes

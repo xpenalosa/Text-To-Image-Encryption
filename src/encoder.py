@@ -1,5 +1,6 @@
 from src import algorithms as algo
 from src.utilities import image_conversions
+from random import randrange
 
 
 def encode_text(text: bytes, algorithm_index: int,
@@ -16,7 +17,7 @@ def encode_text(text: bytes, algorithm_index: int,
         text, algorithms=algorithm_list, index=algorithm_index)
 
 
-def encode_file(text_file: str, algorithm_list: bytes) -> bytes:
+def encode_file(text_file: str, algorithm_list: bytes) -> bytearray:
     """Read the contents of a text file and encode the contents through a
     series of string-modifying algorithms.
 
@@ -31,11 +32,18 @@ def encode_file(text_file: str, algorithm_list: bytes) -> bytes:
     for i in range(1, len(algorithm_list)):
         encoded_text = encode_text(encoded_text, i, algorithm_list)
 
-    return encoded_text
+    # Randomize MSB on all bytes (Ascii -> UTF8 extra bit)
+    rand_msb_text = bytearray()
+    for byte in encoded_text:
+        # print(byte)
+        rand_msb_text.append(randrange(0, 2) * 128 + byte)
+
+    return rand_msb_text
 
 
 def print_help():
     """Display help in console."""
+    # TODO
     pass
 
 
