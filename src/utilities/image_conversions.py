@@ -92,10 +92,8 @@ def image_to_bytes(data: Image) -> bytearray:
     # Rebuild padding value from first bytes
     padding = 0
     for i in range(padding_info_bytes):
-        print(data_byte_arr[i])
         padding += data_byte_arr[i] << (padding_info_bytes - i - 1) * 8
 
-    print(padding)
     if padding:
         # Avoid negative zero padding value
         data_bytes = data_byte_arr[padding_info_bytes:-padding]

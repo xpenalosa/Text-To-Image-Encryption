@@ -13,8 +13,9 @@ def encode_text(text: bytes, algorithm_index: int,
     :return: The encoded text.
     """
     algorithm_id = chr(algorithm_list[algorithm_index])
-    return algo.algorithm_dict.get(algorithm_id).encode(
-        text, algorithms=algorithm_list, index=algorithm_index)
+    algorithm_object = algo.algo_dict.get(algorithm_id, algo.algo_dict.get('a'))
+    return algorithm_object.encode(
+            text, algorithms=algorithm_list, index=algorithm_index)
 
 
 def encode_file(text_file: str, algorithm_list: bytes) -> bytearray:
@@ -41,16 +42,25 @@ def encode_file(text_file: str, algorithm_list: bytes) -> bytearray:
     return rand_msb_text
 
 
-def print_help():
+def print_help(exec_name: str) -> None:
     """Display help in console."""
-    # TODO
-    pass
+    print(f"""
+    Text to image encryption algorithm - Encoding
+         
+         Usage: python3 {exec_name} <file name> <password>
+
+    The file to encode is expected to be in plain-text, and it should have
+    a file extension (.txt, .md, ...) to prevent read/write errors.
+    The password can be manually built from the list indicated in the file
+    "Text-To-ImageEncryption/Algorithm_list.txt" or input blindly, but you
+    should write it down for the decoding process.
+    """)
 
 
 if __name__ == "__main__":
     import sys
     if len(sys.argv) < 3:
-        print_help()
+        print_help(sys.argv[0])
     else:
         file_name = sys.argv[1]
         # Encode file contents

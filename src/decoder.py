@@ -13,8 +13,9 @@ def decode_text(text: bytes, algorithm_index: int,
     :return: The encoded text.
     """
     algorithm_id = chr(algorithm_list[algorithm_index])
-    return algo.algorithm_dict.get(algorithm_id).decode(
-        text, algorithms=algorithm_list, index=algorithm_index)
+    algorithm_object = algo.algo_dict.get(algorithm_id, algo.algo_dict.get('a'))
+    return algorithm_object.decode(
+            text, algorithms=algorithm_list, index=algorithm_index)
 
 
 def decode_file(image_file: str, algorithm_list: bytes) -> bytes:
@@ -28,28 +29,39 @@ def decode_file(image_file: str, algorithm_list: bytes) -> bytes:
     image = Image.open(image_file, "r")
     rand_msb_data = image_conversions.image_to_bytes(image)
 
-    # Ignore MSB in every byte
+    # Ignore randomized MSB in every byte
     encoded_data = bytes("", "ascii")
     for byte in rand_msb_data:
         encoded_data += bytes(chr(byte & 127), "ascii")
 
-    decoded_text = decode_text(encoded_data, len(algorithm_list)-1, algorithm_list)
+    # Run the algorithm list backwards
+    decoded_text = decode_text(
+        encoded_data, len(algorithm_list)-1, algorithm_list)
+
     for i in range(len(algorithm_list)-1, 0, -1):
         decoded_text = decode_text(decoded_text, i, algorithm_list)
 
     return decoded_text
 
 
-def print_help():
+def print_help(exec_name: str) -> None:
     """Display help in console."""
-    # TODO
-    pass
+    print(f"""
+    Text to image encryption algorithm - Decoding
+         
+         Usage: python3 {exec_name} <file name> <password>
+
+    The file to decode is expected to be an RGB image stored in PNG format
+    (Portable Network Graphics).
+    The password should match the one used in the encoding process. Please
+    see the encoding script for a small tip on selecting the password. 
+    """)
 
 
 if __name__ == "__main__":
     import sys
     if len(sys.argv) < 3:
-        print_help()
+        print_help(sys.argv[0])
     else:
         file_name = sys.argv[1]
         # Decode file contents

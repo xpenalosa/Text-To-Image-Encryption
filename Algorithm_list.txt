@@ -1,0 +1,14 @@
+In this file are listed all the available characters that can be used when
+building a password for encoding/decoding. Any characters not presented in
+this file will be ignored and treated as the 'a' character. The characters
+that are followed by an asterisk (*) also accept a digit (0-9) right after
+the character.
+
+    a   ->  Character gets ignored
+    b*  ->  Cycles the bits of the text (*) positions towards the left. If
+            the digit is not present, defaults to 4.
+    c   ->  Performs an exclusive OR (XOR) operation with the input and the
+            password. If the password is shorter than the text, it repeats.
+    d   ->  Performs a NOT operation on the bits of the input.
+    e   ->  Reverses the bits of the input.
+    f   ->  Reverses the characters of the input.
