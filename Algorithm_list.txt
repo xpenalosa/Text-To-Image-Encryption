@@ -7,8 +7,11 @@ the character.
     a   ->  Character gets ignored
     b*  ->  Cycles the bits of the text (*) positions towards the left. If
             the digit is not present, defaults to 4.
-    c   ->  Performs an exclusive OR (XOR) operation with the input and the
+    c   ->  Performs a NOT operation on the bits of the input.
+    d   ->  Reverses the bits of the input.
+    e   ->  Reverses the characters of the input.
+    f   ->  Performs an exclusive OR (XOR) operation with the input and the
             password. If the password is shorter than the text, it repeats.
-    d   ->  Performs a NOT operation on the bits of the input.
-    e   ->  Reverses the bits of the input.
-    f   ->  Reverses the characters of the input.
+    g   ->  Performs an exclusive OR (XOR) operation with the input and the
+            randomly generated values seeded with the password.
+    h   ->  Rivest Cipher 4 algorithm.
