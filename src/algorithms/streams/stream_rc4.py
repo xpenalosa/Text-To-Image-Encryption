@@ -1,5 +1,5 @@
 from src.algorithms.streams.base_stream import BaseStreamAlgorithm
-from typing import Generator, Union, List
+from typing import Generator, Optional, List
 
 
 class StreamRC4Algorithm(BaseStreamAlgorithm):
@@ -31,7 +31,7 @@ class StreamRC4Algorithm(BaseStreamAlgorithm):
     b'q'
     """
 
-    def stream_values(self, **kwargs) -> Generator[int, Union[int, None], None]:
+    def stream_values(self, **kwargs) -> Generator[int, Optional[int], None]:
         """Create an integer generator that yields encoded byte values.
 
         The integer generator yields randomly generated integers in the range
@@ -41,8 +41,8 @@ class StreamRC4Algorithm(BaseStreamAlgorithm):
         :param kwargs: Optional parameters for the generator.
         :return: An integer generator.
         """
-        next_val = yield
-        s_boxes = self.key_scheduling(kwargs.get("algorithms"))
+        next_val = yield -1
+        s_boxes = self.key_scheduling(kwargs["algorithms"])
 
         i, j = 0, 0
         while True:
@@ -77,4 +77,5 @@ class StreamRC4Algorithm(BaseStreamAlgorithm):
 
 if __name__ == "__main__":
     import doctest
+
     doctest.testmod()

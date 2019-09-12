@@ -15,7 +15,7 @@ def encode_text(text: bytes, algorithm_index: int,
     algorithm_id = chr(algorithm_list[algorithm_index])
     algorithm_object = algo.algo_dict.get(algorithm_id, algo.algo_dict.get('a'))
     return algorithm_object.encode(
-            text, algorithms=algorithm_list, index=algorithm_index)
+        text, algorithms=algorithm_list, index=algorithm_index)
 
 
 def encode_file(text_file: str, algorithm_list: bytes) -> bytearray:
@@ -59,6 +59,7 @@ def print_help(exec_name: str) -> None:
 
 if __name__ == "__main__":
     import sys
+
     if len(sys.argv) < 3:
         print_help(sys.argv[0])
     else:

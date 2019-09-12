@@ -1,4 +1,4 @@
-from typing import Generator, Union
+from typing import Generator, Optional
 
 
 class BaseStreamAlgorithm:
@@ -9,13 +9,14 @@ class BaseStreamAlgorithm:
 
     This class requires no parameters.
     """
-    def stream_values(self, **kwargs) -> Generator[int, Union[int, None], None]:
+
+    def stream_values(self, **kwargs) -> Generator[int, Optional[int], None]:
         """Create an integer generator that yields encoded byte values.
 
         :param kwargs: Optional parameters for the generator.
         :return: An integer generator.
         """
-        next_val = yield
+        next_val = yield -1
         while True:
             next_val = yield next_val
 

@@ -1,5 +1,5 @@
 from src.algorithms.streams.base_stream import BaseStreamAlgorithm
-from typing import Generator, Union
+from typing import Generator, Optional
 
 
 class StreamKeyAlgorithm(BaseStreamAlgorithm):
@@ -32,7 +32,7 @@ class StreamKeyAlgorithm(BaseStreamAlgorithm):
     b'\\x00'
     """
 
-    def stream_values(self, **kwargs) -> Generator[int, Union[int, None], None]:
+    def stream_values(self, **kwargs) -> Generator[int, Optional[int], None]:
         """Create an integer generator that yields encoded byte values.
 
         The integer generator yields the byte values of each character in the
@@ -42,8 +42,8 @@ class StreamKeyAlgorithm(BaseStreamAlgorithm):
         :param kwargs: Optional parameters for the generator.
         :return: An integer generator.
         """
-        next_val = yield
-        key = kwargs.get("algorithms")
+        next_val = yield -1
+        key = kwargs["algorithms"]
         i = 0
         while True:
             i = (i + 1) % len(key)
@@ -52,4 +52,5 @@ class StreamKeyAlgorithm(BaseStreamAlgorithm):
 
 if __name__ == "__main__":
     import doctest
+
     doctest.testmod()

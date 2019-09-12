@@ -54,8 +54,8 @@ class BitCycleAlgorithm(BaseAlgorithm):
         try:
             # Access next digit in algorithm list
             positions = int(algorithm_list_parser.get_algorithm_key(
-                algorithms=kwargs.get("algorithms"),
-                index=kwargs.get("index")+1))
+                algorithms=kwargs["algorithms"],
+                index=kwargs["index"] + 1))
         except (ValueError, IndexError):
             # Fall back to default value
             positions = 4
@@ -130,4 +130,5 @@ class BitCycleAlgorithm(BaseAlgorithm):
 
 if __name__ == "__main__":
     import doctest
+
     doctest.testmod()

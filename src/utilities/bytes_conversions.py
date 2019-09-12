@@ -36,7 +36,7 @@ def bit_rep_to_bytes(bit_rep: str) -> bytes:
     """
     string = bytes("", "ascii")
     # Split input string into 7-bit chunks
-    byte_array = [bit_rep[i:i+7] for i in range(0, len(bit_rep), 7)]
+    byte_array = [bit_rep[i:i + 7] for i in range(0, len(bit_rep), 7)]
     for byte in byte_array:
         # Convert to characters and add to existing bytes object
         string += bytes(f"{chr(int(byte, 2))}", "ascii")
@@ -45,4 +45,5 @@ def bit_rep_to_bytes(bit_rep: str) -> bytes:
 
 if __name__ == "__main__":
     import doctest
+
     doctest.testmod()

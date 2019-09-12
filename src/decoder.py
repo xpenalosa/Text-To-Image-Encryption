@@ -15,7 +15,7 @@ def decode_text(text: bytes, algorithm_index: int,
     algorithm_id = chr(algorithm_list[algorithm_index])
     algorithm_object = algo.algo_dict.get(algorithm_id, algo.algo_dict.get('a'))
     return algorithm_object.decode(
-            text, algorithms=algorithm_list, index=algorithm_index)
+        text, algorithms=algorithm_list, index=algorithm_index)
 
 
 def decode_file(image_file: str, algorithm_list: bytes) -> bytes:
@@ -36,9 +36,9 @@ def decode_file(image_file: str, algorithm_list: bytes) -> bytes:
 
     # Run the algorithm list backwards
     decoded_text = decode_text(
-        encoded_data, len(algorithm_list)-1, algorithm_list)
+        encoded_data, len(algorithm_list) - 1, algorithm_list)
 
-    for i in range(len(algorithm_list)-1, 0, -1):
+    for i in range(len(algorithm_list) - 1, 0, -1):
         decoded_text = decode_text(decoded_text, i, algorithm_list)
 
     return decoded_text
@@ -60,6 +60,7 @@ def print_help(exec_name: str) -> None:
 
 if __name__ == "__main__":
     import sys
+
     if len(sys.argv) < 3:
         print_help(sys.argv[0])
     else:

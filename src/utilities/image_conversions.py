@@ -53,7 +53,7 @@ def bytes_to_image(data: bytearray) -> Image:
     pad_count = short_side * long_side * 3 - len(data) - padding_info_bytes
 
     # N bytes of padding at most
-    if pad_count > 2**(8*padding_info_bytes) - 1:
+    if pad_count > 2 ** (8 * padding_info_bytes) - 1:
         raise ValueError("Text is too long to be encoded in an image")
 
     # Create padding bytes from sample

@@ -1,5 +1,5 @@
 from src.algorithms.streams.base_stream import BaseStreamAlgorithm
-from typing import Generator, Union
+from typing import Generator, Optional
 import random
 
 
@@ -35,7 +35,7 @@ class StreamSeedAlgorithm(BaseStreamAlgorithm):
     b'P'
     """
 
-    def stream_values(self, **kwargs) -> Generator[int, Union[int, None], None]:
+    def stream_values(self, **kwargs) -> Generator[int, Optional[int], None]:
         """Create an integer generator that yields encoded byte values.
 
         The integer generator yields randomly generated integers in the range
@@ -45,14 +45,15 @@ class StreamSeedAlgorithm(BaseStreamAlgorithm):
         :param kwargs: Optional parameters for the generator.
         :return: An integer generator.
         """
-        next_val = yield
-        key = kwargs.get("algorithms")
+        next_val = yield -1
+        key = kwargs["algorithms"]
         seed = sum([b for b in key])
         random.seed(seed)
         while True:
-            next_val = yield next_val ^ random.randint(0, 2**7-1)
+            next_val = yield next_val ^ random.randint(0, 2 ** 7 - 1)
 
 
 if __name__ == "__main__":
     import doctest
+
     doctest.testmod()
