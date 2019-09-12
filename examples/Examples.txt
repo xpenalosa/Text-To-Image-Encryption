@@ -1,0 +1,5 @@
+This folder contains a few examples produced with the project. Each of the
+image files has the password used as its name, so it is possible to decrypt
+their contents with a command like this:
+
+> python3 src/decoder.py coolproject.png coolproject

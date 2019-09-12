@@ -39,7 +39,7 @@ def decode_file(image_file: str, algorithm_list: bytes) -> bytes:
         encoded_data, len(algorithm_list) - 1, algorithm_list)
 
     for i in range(len(algorithm_list) - 1, 0, -1):
-        decoded_text = decode_text(decoded_text, i, algorithm_list)
+        decoded_text = decode_text(decoded_text, i - 1, algorithm_list)
 
     return decoded_text
 
